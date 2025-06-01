@@ -1,16 +1,12 @@
+## Module 4: NoSQL Integration with MongoDB
 
-Module 4: NoSQL Integration with MongoDB
-In Module 4, we transitioned from static JSON files to a live NoSQL database using MongoDB. This marked a critical milestone in the full stack development of the Travlr Getaways application.
+In Module 4, we transitioned from static JSON files to a live NoSQL database using **MongoDB**. This marked a critical milestone in the full stack development of the Travlr Getaways application.
 
-Key Updates:
-Installed and configured Mongoose for database interaction.
+### Key Updates:
+- Installed and configured **Mongoose** for MongoDB interaction.
+- Created a **Mongoose schema** (`travlr.js`) to define and validate trip data.
+- Developed a **database connection module** (`db.js`) to manage MongoDB connectivity.
+- Built a **seeding script** (`seed.js`) to populate the database with initial trip records.
+- Verified successful seeding through **MongoDB Compass**.
 
-Created a Mongoose schema (travlr.js) to define and validate trip data.
-
-Populated the MongoDB collection (trips) using a custom seed script (seed.js).
-
-Verified data insertion through MongoDB Compass.
-
-Established a modular connection script (db.js) to manage MongoDB connectivity.
-
-These changes ensure that the application is now backed by a dynamic, queryable database, laying the foundation for robust API interactions in upcoming modules.
+These updates ensure that the application now leverages a dynamic, queryable database, preparing it for full API integration and future CRUD operations.
