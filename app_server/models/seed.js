@@ -1,66 +1,47 @@
 const mongoose = require('mongoose');
-const Trip = require('./travlr'); // this loads and registers the schema
-
-const dbURI = 'mongodb://127.0.0.1/travlr';
-
-mongoose.connect(dbURI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
-
-mongoose.connection.on('connected', () => {
-  console.log(`Mongoose connected to ${dbURI}`);
-});
-
-mongoose.connection.on('error', err => {
-  console.log('Mongoose connection error:', err);
-});
-
-mongoose.connection.on('disconnected', () => {
-  console.log('Mongoose disconnected');
-});
+require('./db');
+const Trip = mongoose.model('Trip');
 
 const seedTrips = [
   {
-    code: "GAL123",
-    name: "Gale Reef",
-    length: "5 days",
-    start: "2025-08-21T08:00:00Z",
-    resort: "Emerald Bay, 5 stars",
-    perPerson: "1999.99",
-    image: "reef1.jpg",
-    description: "Update Reef Sed et augue lorem. In sit amet placerat arcu"
+    code: 'GR100',
+    name: 'Gale Reef',
+    length: 7,
+    start: new Date(),
+    resort: 'Coral Sands',
+    perPerson: 1250,
+    image: 'reef1.jpg',
+    description: 'Sed et augue lorem. In sit amet placerat arcu. Mauris volutpat ipsum ac justo mollis vel vestibulum orci gravida. Vestibulum sit amet porttitor odio. Nulla facilisi. Fusce at pretium felis. Sed consequat libero ut turpis venenatis ut aliquam risus semper. Etiam convallis mi vel risus pretium sodales. Etiam nunc lorem ullamcorper vitae laoreet.'
   },
   {
-    code: "DAW098",
-    name: "Dawson's Reef",
-    length: "4 nights / 5 days",
-    start: "2025-08-22T08:00:00Z",
-    resort: "Dawson Lagoon, 4 stars",
-    perPerson: "1399.99",
-    image: "reef2.jpg",
-    description: "Dawson's Reef Integer magna leo, posuere et dignissim"
+    code: 'DR200',
+    name: 'Dawson’s Reef',
+    length: 5,
+    start: new Date(),
+    resort: 'Reef Point Inn',
+    perPerson: 980,
+    image: 'reef2.jpg',
+    description: 'Integer magna leo, posuere et dignissim vitae, porttitor at odio. Pellentesque a metus nec magna placerat volutpat. Nunc nisi mi, elementum sit amet aliquet quis, tristique quis nisl. Curabitur odio lacus, blandit ut hendrerit vulputate, vulputate at est. Morbi aliquet viverra metus eu consectetur. In lorem dui, elementum sit amet convallis ac, tincidunt vel sapien.'
   },
   {
-    code: "CLA122",
-    name: "Claire's Reef",
-    length: "4 nights / 5 days",
-    start: "2025-08-23T08:00:00Z",
-    resort: "Coral Sands, 5 stars",
-    perPerson: "1599.99",
-    image: "reef3.jpg",
-    description: "Claire's Reef Donec sed felis risus. Nulla facilisi. Donec"
+    code: 'CR300',
+    name: 'Claire’s Reef',
+    length: 6,
+    start: new Date(),
+    resort: 'Crystal Waters Resort',
+    perPerson: 1120,
+    image: 'reef3.jpg',
+    description: 'Donec sed felis risus. Nulla facilisi. Donec a orci tellus, et auctor odio. Fusce ac orci nibh, quis semper arcu. Cras orci neque, euismod et accumsan ac, sagittis molestie lorem. Proin odio sapien, elementum at tempor non, vulputate eget libero. In hac habitasse platea dictumst. Integer purus justo, egestas eu consectetur eu, cursus in tortor.'
   }
 ];
 
-const seedDB = async () => {
-  await Trip.deleteMany({});
-  await Trip.insertMany(seedTrips);
-  console.log(`Successfully seeded ${seedTrips.length} trips.`);
-  mongoose.connection.close();
-};
-
-seedDB().catch(err => {
-  console.error('Seeding error:', err);
-  mongoose.connection.close();
-});
+Trip.deleteMany({})
+  .then(() => Trip.insertMany(seedTrips))
+  .then((docs) => {
+    console.log(`Successfully seeded ${docs.length} trips.`);
+    mongoose.connection.close();
+  })
+  .catch((err) => {
+    console.error("Error seeding trips:", err);
+    mongoose.connection.close();
+  });
