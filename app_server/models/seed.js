@@ -1,53 +1,66 @@
-// Bring in the DB connection and the Trip schema
 const mongoose = require('mongoose');
-const db = require('./db');
-const Trip = require('./travlr');
+const Trip = require('./travlr'); // this loads and registers the schema
 
-// Seed data array
+const dbURI = 'mongodb://127.0.0.1/travlr';
+
+mongoose.connect(dbURI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
+
+mongoose.connection.on('connected', () => {
+  console.log(`Mongoose connected to ${dbURI}`);
+});
+
+mongoose.connection.on('error', err => {
+  console.log('Mongoose connection error:', err);
+});
+
+mongoose.connection.on('disconnected', () => {
+  console.log('Mongoose disconnected');
+});
+
 const seedTrips = [
   {
-    code: "BALI1234",
-    name: "Bali Beach Paradise",
-    length: "6 nights / 5 days",
-    start: "2025-08-14T08:00:00Z",
-    resort: "Dreamland Bay, 5 stars",
-    perPerson: "1499.99",
-    image: "bali.jpg",
-    description: "Relax on the stunning beaches of Bali with crystal clear waters and vibrant culture."
-  },
-  {
-    code: "TOKY5678",
-    name: "Tokyo City Lights",
-    length: "4 nights / 3 days",
-    start: "2025-09-10T08:00:00Z",
-    resort: "Shibuya Stay, 4 stars",
-    perPerson: "1299.99",
-    image: "tokyo.jpg",
-    description: "Experience the bustling nightlife, cutting-edge technology, and rich traditions of Tokyo."
-  },
-  {
-    code: "SWISS7890",
-    name: "Swiss Alps Adventure",
-    length: "5 nights / 4 days",
-    start: "2025-12-20T08:00:00Z",
-    resort: "Mountain Escape Lodge, 5 stars",
+    code: "GAL123",
+    name: "Gale Reef",
+    length: "5 days",
+    start: "2025-08-21T08:00:00Z",
+    resort: "Emerald Bay, 5 stars",
     perPerson: "1999.99",
-    image: "swiss.jpg",
-    description: "Hit the slopes and explore beautiful snowy landscapes in the heart of Switzerland."
+    image: "reef1.jpg",
+    description: "Update Reef Sed et augue lorem. In sit amet placerat arcu"
+  },
+  {
+    code: "DAW098",
+    name: "Dawson's Reef",
+    length: "4 nights / 5 days",
+    start: "2025-08-22T08:00:00Z",
+    resort: "Dawson Lagoon, 4 stars",
+    perPerson: "1399.99",
+    image: "reef2.jpg",
+    description: "Dawson's Reef Integer magna leo, posuere et dignissim"
+  },
+  {
+    code: "CLA122",
+    name: "Claire's Reef",
+    length: "4 nights / 5 days",
+    start: "2025-08-23T08:00:00Z",
+    resort: "Coral Sands, 5 stars",
+    perPerson: "1599.99",
+    image: "reef3.jpg",
+    description: "Claire's Reef Donec sed felis risus. Nulla facilisi. Donec"
   }
 ];
 
-// Async function to seed database
 const seedDB = async () => {
-  try {
-    await Trip.deleteMany({});
-    const result = await Trip.insertMany(seedTrips);
-    console.log(`Successfully seeded ${result.length} trips.`);
-  } catch (err) {
-    console.error('Error seeding trips:', err);
-  } finally {
-    mongoose.connection.close();
-  }
+  await Trip.deleteMany({});
+  await Trip.insertMany(seedTrips);
+  console.log(`Successfully seeded ${seedTrips.length} trips.`);
+  mongoose.connection.close();
 };
 
-seedDB();
+seedDB().catch(err => {
+  console.error('Seeding error:', err);
+  mongoose.connection.close();
+});
