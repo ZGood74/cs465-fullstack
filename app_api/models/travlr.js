@@ -12,6 +12,5 @@ const tripSchema = new mongoose.Schema({
   description: { type: String, required: true }
 });
 
-// Register the model
-const Trip = mongoose.model('Trip', tripSchema);
-module.exports = Trip;
+//  Register model as 'trips' to match controller
+mongoose.model('trips', tripSchema);

@@ -1,16 +1,30 @@
-const fs = require('fs');
-const path = require('path');
+const fetch = require('node-fetch');
 
-// GET travel view
-const travel = (req, res) => {
-  const dataPath = path.join(__dirname, '../../data/trips.json');
-  const rawData = fs.readFileSync(dataPath);
-  const trips = JSON.parse(rawData);
+const travel = async (req, res) => {
+  try {
+    const response = await fetch('http://localhost:3000/api/trips');
+    const trips = await response.json();
 
-  res.render('travel', {
-    title: 'Travlr Getaways',
-    trips
-  });
+    let message = null;
+    if (!(trips instanceof Array)) {
+      message = 'API lookup error';
+    } else if (!trips.length) {
+      message = 'No trips found';
+    }
+
+    res.render('travel', {
+      title: 'Travlr Getaways',
+      trips,
+      message
+    });
+  } catch (err) {
+    console.error('Error fetching trips from API:', err.message);
+    res.render('travel', {
+      title: 'Travlr Getaways',
+      trips: [],
+      message: 'Something went wrong with the API call'
+    });
+  }
 };
 
 module.exports = {

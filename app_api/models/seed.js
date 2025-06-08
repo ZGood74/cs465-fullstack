@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 require('./db');
-const Trip = mongoose.model('Trip');
+require('./travlr'); // Register the schema
+
+const Trip = mongoose.model('trips');
 
 const seedTrips = [
   {
