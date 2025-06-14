@@ -1,9 +1,9 @@
-const fetch = require('node-fetch');
+const mongoose = require('mongoose');
+const Trip = mongoose.model('Trip');
 
 const travel = async (req, res) => {
   try {
-    const response = await fetch('http://localhost:3000/api/trips');
-    const trips = await response.json();
+    const trips = await Trip.find();
 
     let message = null;
     if (!(trips instanceof Array)) {
@@ -18,11 +18,11 @@ const travel = async (req, res) => {
       message
     });
   } catch (err) {
-    console.error('Error fetching trips from API:', err.message);
+    console.error('Error fetching trips:', err.message);
     res.render('travel', {
       title: 'Travlr Getaways',
       trips: [],
-      message: 'Something went wrong with the API call'
+      message: 'Something went wrong retrieving trips'
     });
   }
 };
