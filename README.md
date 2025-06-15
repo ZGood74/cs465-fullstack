@@ -1,34 +1,49 @@
-# Travlr Getaways – Module 5
+Travlr Getaways Admin - Module 6
+This project completes Module 6 of the CS465 Full-Stack Development course. It showcases a functional MEAN stack (MongoDB, Express, Angular, Node.js) application with working CRUD operations for managing travel trips.
 
-## Overview
+Overview
+The admin panel allows users to view, add, and edit trip data. Angular handles the front-end logic and rendering, while the Express backend connects to MongoDB using Mongoose for data persistence. Trips are displayed in a clean card layout and can be updated through a form-driven UI.
 
-Module 5 focused on evolving the Travlr Getaways application into an API-driven system. This included creating RESTful endpoints, moving data to a MongoDB database, and dynamically rendering trip data on the frontend using the Handlebars template engine.
+Features
+Trip Listing: Fetches and displays all trips from the MongoDB database using a GET request. Each trip is shown via a standalone card component.
 
-## Features
+Add Trip: Allows users to create new trips using an Angular reactive form. Sends a POST request to the backend to add a trip to the database.
 
-- API routes for trips created under `app_api`
-- `GET /api/trips` returns all available trips
-- `GET /api/trips/:tripCode` returns details of a specific trip
-- MongoDB schema created using Mongoose
-- Seed script (`seed.js`) populates the database with sample trip data
-- Updated `travel.hbs` view to dynamically load data from the API
-- Integration of backend data into the public frontend
+Edit Trip: Fetches existing trip data using the trip code. Populates the form for editing and sends a PUT request to update the trip in the database.
 
-## Technologies
+Technologies Used
+Angular with Standalone Components and Reactive Forms
 
-- Node.js  
-- Express.js  
-- MongoDB + Mongoose  
-- Handlebars (hbs)  
-- Postman (for API testing)
+Express.js and Node.js
 
-## Setup Instructions
+MongoDB with Mongoose ODM
 
-1. **Install dependencies**
+MongoDB Compass for local database inspection
 
-   ```bash
-   npm install
-   ```
+Setup Instructions
+Start your local MongoDB server (ensure MongoDB is running on default port 27017).
+
+In the root project directory, run npm install to install backend dependencies.
+
+Start the backend server with npm start (runs on http://localhost:3000).
+
+Navigate to the app_admin folder for the Angular frontend.
+
+Run npm install to install Angular dependencies.
+
+Launch the Angular app using ng serve (runs on http://localhost:4200).
+
+Use the UI to add or edit trips and observe updates reflected in the MongoDB database.
+
+Git Workflow Used
+Created branch: git checkout -b module6
+
+Committed changes: git add . then git commit -m "Complete Module 6 functionality"
+
+Pushed to GitHub: git push origin module6
+
+Status
+Module 6 is fully complete. Trip listing, creation, and update operations are working as expected through the Angular interface and Express API. The application follows the MVC pattern and uses RESTful endpoints.
 
 2. **Seed the database**
 
