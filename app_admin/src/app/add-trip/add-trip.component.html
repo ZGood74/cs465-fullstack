@@ -1,0 +1,26 @@
+<div class="container mt-4">
+  <h2 class="text-center">Add Trip</h2>
+  <form *ngIf="addForm" [formGroup]="addForm" (ngSubmit)="onSubmit()">
+    <div *ngFor="let field of ['code', 'name', 'length', 'start', 'resort', 'perPerson', 'image', 'description']" class="mb-3">
+      <label [for]="field" class="form-label text-capitalize">{{ field }}</label>
+      <input
+        *ngIf="field !== 'description'"
+        type="text"
+        [formControlName]="field"
+        class="form-control"
+        [ngClass]="{'is-invalid': submitted && f[field].errors}"
+      />
+      <textarea
+        *ngIf="field === 'description'"
+        [formControlName]="field"
+        class="form-control"
+        [ngClass]="{'is-invalid': submitted && f[field].errors}"
+      ></textarea>
+      <div *ngIf="submitted && f[field].errors" class="invalid-feedback">
+        {{ field | titlecase }} is required
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Trip</button>
+  </form>
+</div>
