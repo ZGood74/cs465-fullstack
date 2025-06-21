@@ -1,65 +1,38 @@
-# Travlr Getaways – Module 5
+CS 465 - Module 7: Authentication and JWT Integration
 
-## Overview
+This module expands the Travlr Getaways full-stack application by adding secure user authentication. It includes a working registration and login system, integration of JWT, and protected API access.
 
-Module 5 focused on evolving the Travlr Getaways application into an API-driven system. This included creating RESTful endpoints, moving data to a MongoDB database, and dynamically rendering trip data on the frontend using the Handlebars template engine.
+Features Implemented:
+- User registration endpoint (POST /api/register)
+- User login endpoint (POST /api/login)
+- JWT issued on successful login and stored in browser localStorage
+- Angular HTTP interceptor adds Authorization header with JWT
+- Express routes protected with JWT using Passport
+- API tested with Postman using valid Bearer token
+- Angular frontend loads trips using authenticated requests
 
-## Features
+How to Run:
+1. Start the backend:
+   - Navigate to the root project folder
+   - Run: npm install
+   - Then: npm start
 
-- API routes for trips created under `app_api`
-- `GET /api/trips` returns all available trips
-- `GET /api/trips/:tripCode` returns details of a specific trip
-- MongoDB schema created using Mongoose
-- Seed script (`seed.js`) populates the database with sample trip data
-- Updated `travel.hbs` view to dynamically load data from the API
-- Integration of backend data into the public frontend
+2. Start the frontend:
+   - Navigate to angular-src
+   - Run: npm install
+   - Then: ng serve
 
-## Technologies
+3. Open the browser at http://localhost:4200
+   - The backend runs at http://localhost:3000
 
-- Node.js  
-- Express.js  
-- MongoDB + Mongoose  
-- Handlebars (hbs)  
-- Postman (for API testing)
+Notes:
+- JWT is saved in localStorage with the key: travlr-token
+- HTTP requests to protected routes include the Authorization: Bearer <token> header automatically
+- The HTTP interceptor is set up in app.config.ts
 
-## Setup Instructions
+Angular/Node Version Note:
+This project was built using the official Angular CLI commands provided in the Full Stack Guide. The Angular version is 17+ and Node is version 22.15.0. A comment has been added to the assignment submission explaining this configuration, as it caused compatibility concerns in the prior module.
 
-1. **Install dependencies**
-
-   ```bash
-   npm install
-   ```
-
-2. **Seed the database**
-
-   ```bash
-   node app_api/models/seed.js
-   ```
-
-3. **Start the server**
-
-   ```bash
-   npm start
-   ```
-
-4. **Open the app**
-
-   - Public site: `http://localhost:3000/travel`
-   - API endpoint: `http://localhost:3000/api/trips`
-
-## API Endpoints
-
-- `GET /api/trips`  
-  Fetches all trips from the database.
-
-- `GET /api/trips/:tripCode`  
-  Fetches details of a specific trip by code (e.g. `GR100`).
-
-## Notes
-
-- The transition to an API architecture allows future expansion to SPA frameworks or mobile apps.
-- The database is locally hosted on MongoDB (`mongodb://127.0.0.1/travlr`).
-- Error handling is implemented for missing or invalid API routes.
 
 ## Course
 
