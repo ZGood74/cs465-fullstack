@@ -1,4 +1,4 @@
-#CS 465 - Module 7: Authentication and JWT Integration
+# CS 465 - Module 7: Authentication and JWT Integration
 
 This module expands the Travlr Getaways full-stack application by adding secure user authentication. It includes a working registration and login system, integration of JWT, and protected API access.
 
