@@ -11,7 +11,7 @@ import { Trip } from '../models/trip';
   imports: [CommonModule, TripCard],
   templateUrl: './trip-listing.component.html',
   styleUrls: ['./trip-listing.component.css'],
-  providers: [TripDataService]
+  
 })
 export class TripListingComponent implements OnInit {
   trips: Trip[] = [];
