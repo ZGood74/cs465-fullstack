@@ -8,7 +8,6 @@
     </p>
     <p class="card-text" [innerHTML]="trip.description"></p>
 
-    <!-- EDIT BUTTON -->
-    <button class="btn btn-warning mt-2" (click)="editTrip()">Edit</button>
+    <button class="btn btn-warning mt-2" (click)="editTrip()" *ngIf="isLoggedIn()">Edit</button>
   </div>
 </div>

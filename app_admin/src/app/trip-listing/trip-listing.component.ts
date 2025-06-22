@@ -1,17 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TripDataService } from '../services/trip-data.service'; // import service
-import TripCard from '../trip-card/trip-card.component';
-import { Router } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
+import { TripDataService } from '../services/trip-data.service';
+import { TripCardComponent } from '../trip-card/trip-card.component';
 import { Trip } from '../models/trip';
 
 @Component({
   selector: 'app-trip-listing',
   standalone: true,
-  imports: [CommonModule, TripCard],
+  imports: [CommonModule, TripCardComponent, RouterModule],
   templateUrl: './trip-listing.component.html',
   styleUrls: ['./trip-listing.component.css'],
-  
 })
 export class TripListingComponent implements OnInit {
   trips: Trip[] = [];
