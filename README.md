@@ -241,9 +241,24 @@ Notes:
 Angular/Node Version Note:
 This project was built using the official Angular CLI commands provided in the Full Stack Guide. The Angular version is 17+ and Node is version 22.15.0. A comment has been added to the assignment submission explaining this configuration, as it caused compatibility concerns in the prior module.
 
+## CS 465 Final Reflection
 
-## Course
+## Architecture
+- This project used two types of frontend development. The initial version relied on Express with Handlebars templates to render server-side HTML pages. This approach allowed for a simple, functional customer interface with dynamic data handled by the server. In later stages, the application transitioned to an Angular single-page application (SPA), which handled routing on the client side and delivered a more dynamic and modern user experience. The SPA architecture also improved performance by reducing full page reloads and made it easier to build reusable UI components.
+- The backend used a NoSQL MongoDB database. This choice was made because MongoDB stores data as JSON-like documents, making it a natural fit for JavaScript-based applications and easy to connect with Angular through HTTP and JSON. The flexibility of MongoDB’s schema-less design allowed for rapid development and modification of the data structure as the project evolved. Mongoose was used to define data models, enforce validation, and streamline interaction with the database.
 
-**CS 465 – Full Stack Development**  
-Southern New Hampshire University
+## Functionality
+- JSON (JavaScript Object Notation) is a data format used to transmit structured data between systems. Unlike JavaScript, it is not executable code but a text-based format that represents key-value pairs and arrays. In this project, JSON was the core structure used to send and receive data between the Angular frontend and the Express backend via HTTP requests and responses.
+- Code was frequently refactored to improve functionality and maintainability. For example, HTTP calls were moved into Angular services to separate logic from the components, and form inputs were converted into reusable reactive form components. The trip display UI was modularized into components, allowing the same code to be used across different views. On the backend, route handlers were organized using RESTful principles to simplify request handling and support clean URL structures. These improvements resulted in easier testing, less duplication, and faster updates.
+
+## Testing
+- Testing was conducted using Postman to verify that all backend endpoints worked correctly. This included validating data retrieval (GET), creation (POST), updates (PUT), and deletion (DELETE). Postman made it easy to simulate real HTTP requests and check the returned JSON responses.
+- When JWT-based authentication was added for the admin panel, additional testing was needed to verify login, token generation, and token-based access control. Protected routes were tested with valid and invalid tokens to ensure proper authorization. On the frontend, Angular route guards were tested to confirm that admin-only routes were inaccessible without a valid login.
+- Understanding how methods (GET, POST, etc.), endpoints (URLs and routes), and security mechanisms (JWT, middleware) work together was crucial to implementing a secure full stack application. Express middleware was used to verify tokens and protect routes, while Angular managed the login state and sent tokens with requests as needed.
+
+## Reflection
+This course has significantly contributed to my professional development and technical confidence. I’ve learned how to build a full stack web application from the ground up using technologies that are widely used in the industry, including Angular, Node.js, Express, and MongoDB. I now understand how each layer of a modern web application works and how to connect them using RESTful APIs and JSON data. I’ve also gained hands-on experience with routing, authentication, frontend and backend logic separation, API testing, and component-based UI development.
+
+By completing this project, I’ve strengthened my ability to work across the full stack and gained practical knowledge that I can apply in real-world software development roles. I feel more prepared to pursue job opportunities in web or software development, freelance work, or even my own game development projects. The skills I’ve built in this course make me more marketable and better equipped to succeed in the tech industry.
+
 
