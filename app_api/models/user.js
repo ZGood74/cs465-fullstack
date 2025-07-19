@@ -2,6 +2,14 @@ const mongoose = require('mongoose');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 
+/**
+ * User schema for storing account information securely.
+ * Fields:
+ * - email: Unique email for login
+ * - name: User’s display name
+ * - hash: Hashed password
+ * - salt: Salt used in hashing
+ */
 const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   name: { type: String, required: true },
@@ -9,7 +17,10 @@ const userSchema = new mongoose.Schema({
   salt: String
 });
 
-// Method to set the salt and hash the password
+/**
+ * Sets a secure hashed password for the user.
+ * @param {string} password - The plain-text password to be hashed.
+ */
 userSchema.methods.setPassword = function(password) {
   this.salt = crypto.randomBytes(16).toString('hex');
   this.hash = crypto
@@ -17,7 +28,11 @@ userSchema.methods.setPassword = function(password) {
     .toString('hex');
 };
 
-// Method to validate a password
+/**
+ * Validates a user's password against stored hash.
+ * @param {string} password - The password attempt.
+ * @returns {boolean} - Whether the password is valid.
+ */
 userSchema.methods.validPassword = function(password) {
   const hash = crypto
     .pbkdf2Sync(password, this.salt, 1000, 64, 'sha512')
@@ -25,7 +40,10 @@ userSchema.methods.validPassword = function(password) {
   return this.hash === hash;
 };
 
-// Method to generate a JWT for the user
+/**
+ * Generates a JSON Web Token for authenticated sessions.
+ * @returns {string} - A signed JWT token.
+ */
 userSchema.methods.generateJWT = function() {
   return jwt.sign(
     {
@@ -40,6 +58,6 @@ userSchema.methods.generateJWT = function() {
   );
 };
 
-// Register the model with Mongoose
+// Register the User model with Mongoose
 const User = mongoose.model('users', userSchema);
 module.exports = User;

@@ -5,32 +5,53 @@ const { expressjwt: jwt } = require('express-jwt');
 const tripsController = require('../controllers/trips');
 const authController = require('../controllers/authentication');
 
-//  JWT Middleware
+// JWT middleware for protected routes
 const auth = jwt({
   secret: process.env.JWT_SECRET,
   algorithms: ['HS256'],
   userProperty: 'payload'
 });
 
-// GET all trips (public) + POST new trip (protected)
-router
-  .route('/trips')
-  .get(tripsController.tripsList)
-  .post(auth, tripsController.tripsAddTrip);
+/**
+ * @route   GET /trips
+ * @desc    Get all trips
+ * @access  Public
+ */
+router.get('/trips', tripsController.tripsList);
 
-// GET one trip by code (public) + PUT update (protected)
-router
-  .route('/trips/:tripCode')
-  .get(tripsController.tripsFindByCode)
-  .put(auth, tripsController.tripsUpdateTrip);
+/**
+ * @route   POST /trips
+ * @desc    Create a new trip
+ * @access  Protected
+ */
+router.post('/trips', auth, tripsController.tripsAddTrip);
 
-// Register and login routes (public)
-router
-  .route('/register')
-  .post(authController.register);
+/**
+ * @route   GET /trips/:tripCode
+ * @desc    Get a trip by its tripCode
+ * @access  Public
+ */
+router.get('/trips/:tripCode', tripsController.tripsFindByCode);
 
-router
-  .route('/login')
-  .post(authController.login);
+/**
+ * @route   PUT /trips/:tripCode
+ * @desc    Update a trip by its tripCode
+ * @access  Protected
+ */
+router.put('/trips/:tripCode', auth, tripsController.tripsUpdateTrip);
+
+/**
+ * @route   POST /register
+ * @desc    Register a new user
+ * @access  Public
+ */
+router.post('/register', authController.register);
+
+/**
+ * @route   POST /login
+ * @desc    Log in a user
+ * @access  Public
+ */
+router.post('/login', authController.login);
 
 module.exports = router;

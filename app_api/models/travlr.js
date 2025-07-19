@@ -1,5 +1,17 @@
 const mongoose = require('mongoose');
 
+/**
+ * Mongoose schema for a Trip
+ * Fields:
+ * - code: Unique identifier for the trip
+ * - name: Trip name/title
+ * - length: Duration of the trip (e.g., "7 days")
+ * - start: Start date of the trip
+ * - resort: Name of the resort
+ * - perPerson: Cost per person
+ * - image: URL to trip image
+ * - description: Textual description of the trip
+ */
 const tripSchema = new mongoose.Schema({
   code: { type: String, required: true },
   name: { type: String, required: true },
@@ -11,4 +23,5 @@ const tripSchema = new mongoose.Schema({
   description: { type: String, required: true }
 });
 
+// Register the model
 mongoose.model('Trip', tripSchema);
