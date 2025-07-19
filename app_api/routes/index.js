@@ -5,7 +5,7 @@ const { expressjwt: jwt } = require('express-jwt');
 const tripsController = require('../controllers/trips');
 const authController = require('../controllers/authentication');
 
-// 🛡️ JWT Middleware
+//  JWT Middleware
 const auth = jwt({
   secret: process.env.JWT_SECRET,
   algorithms: ['HS256'],
