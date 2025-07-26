@@ -16,7 +16,7 @@ export class EditTripComponent implements OnInit {
   editForm!: FormGroup;
   trip!: Trip;
   submitted = false;
-  message: string = '';
+  submissionError: string | null = null;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -34,41 +34,47 @@ export class EditTripComponent implements OnInit {
 
     this.editForm = this.formBuilder.group({
       _id: [''],
-      code: [tripCode, Validators.required],
-      name: ['', Validators.required],
-      length: ['', Validators.required],
+      code: [tripCode, [Validators.required, Validators.pattern('^[A-Z]{3}[0-9]{3}$')]],
+      name: ['', [Validators.required, Validators.minLength(3)]],
+      length: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
       start: ['', Validators.required],
       resort: ['', Validators.required],
-      perPerson: ['', Validators.required],
+      perPerson: ['', [Validators.required, Validators.pattern('^\\d+(\\.\\d{1,2})?$')]],
       image: ['', Validators.required],
-      description: ['', Validators.required]
+      description: ['', [Validators.required, Validators.minLength(10)]]
     });
 
     this.tripDataService.getTrip(tripCode).subscribe({
       next: (trip: Trip) => {
-        console.log('Trip from API:', trip); //  DEBUG
         this.trip = trip;
         this.editForm.patchValue(trip);
       },
       error: (error) => {
         console.error('Error loading trip:', error);
+        this.submissionError = 'Failed to load trip details. Please try again later.';
       }
     });
   }
 
   onSubmit(): void {
     this.submitted = true;
+    this.submissionError = null;
 
-    if (this.editForm.valid) {
-      this.tripDataService.updateTrip(this.editForm.value).subscribe({
-        next: () => {
-          this.router.navigate(['']);
-        },
-        error: (error) => {
-          console.error('Error updating trip:', error);
-        }
-      });
+    if (this.editForm.invalid) {
+      return;
     }
+
+    const updatedTrip: Trip = this.editForm.value;
+
+    this.tripDataService.updateTrip(updatedTrip).subscribe({
+      next: () => {
+        this.router.navigate(['']);
+      },
+      error: (error) => {
+        console.error('Error updating trip:', error);
+        this.submissionError = 'Failed to update trip. Please try again.';
+      }
+    });
   }
 
   get f() {

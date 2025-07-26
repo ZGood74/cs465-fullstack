@@ -14,6 +14,7 @@ import { Trip } from '../models/trip';
 })
 export class TripListingComponent implements OnInit {
   trips: Trip[] = [];
+  loading: boolean = false;
 
   constructor(
     private router: Router,
@@ -29,9 +30,16 @@ export class TripListingComponent implements OnInit {
   }
 
   private getTrips(): void {
+    this.loading = true;
     this.tripDataService.getTrips().subscribe({
-      next: (data) => (this.trips = data),
-      error: (err) => console.error('Failed to load trips:', err)
+      next: (trips: Trip[]) => {
+        this.trips = trips;
+        this.loading = false;
+      },
+      error: (err: any) => {
+        console.error('[TripListingComponent] Failed to load trips:', err);
+        this.loading = false;
+      }
     });
   }
 }
