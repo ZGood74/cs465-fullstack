@@ -1,49 +1,69 @@
+/**
+ * Seed 50–100 Trip records from Trips_Test_Data.json
+ * Run: node app_api/models/seed.js
+ */
+
+require('dotenv').config({ path: require('path').join(process.cwd(), '.env') });
 const mongoose = require('mongoose');
-require('./db');
-require('./travlr'); // Register the schema
+const path = require('path');
 
-const Trip = mongoose.model('trips');
+// If your './db' already connects using MONGODB_URI, keep it.
+// Otherwise comment the next line and let the explicit connect() below run.
+try { require('./db'); } catch { /* ignore if you don't have ./db */ }
 
-const seedTrips = [
-  {
-    code: 'GR100',
-    name: 'Gale Reef',
-    length: 7,
-    start: new Date(),
-    resort: 'Coral Sands',
-    perPerson: 1250,
-    image: 'reef1.jpg',
-    description: 'Sed et augue lorem. In sit amet placerat arcu. Mauris volutpat ipsum ac justo mollis vel vestibulum orci gravida. Vestibulum sit amet porttitor odio. Nulla facilisi. Fusce at pretium felis. Sed consequat libero ut turpis venenatis ut aliquam risus semper. Etiam convallis mi vel risus pretium sodales. Etiam nunc lorem ullamcorper vitae laoreet.'
-  },
-  {
-    code: 'DR200',
-    name: 'Dawson’s Reef',
-    length: 5,
-    start: new Date(),
-    resort: 'Reef Point Inn',
-    perPerson: 980,
-    image: 'reef2.jpg',
-    description: 'Integer magna leo, posuere et dignissim vitae, porttitor at odio. Pellentesque a metus nec magna placerat volutpat. Nunc nisi mi, elementum sit amet aliquet quis, tristique quis nisl. Curabitur odio lacus, blandit ut hendrerit vulputate, vulputate at est. Morbi aliquet viverra metus eu consectetur. In lorem dui, elementum sit amet convallis ac, tincidunt vel sapien.'
-  },
-  {
-    code: 'CR300',
-    name: 'Claire’s Reef',
-    length: 6,
-    start: new Date(),
-    resort: 'Crystal Waters Resort',
-    perPerson: 1120,
-    image: 'reef3.jpg',
-    description: 'Donec sed felis risus. Nulla facilisi. Donec a orci tellus, et auctor odio. Fusce ac orci nibh, quis semper arcu. Cras orci neque, euismod et accumsan ac, sagittis molestie lorem. Proin odio sapien, elementum at tempor non, vulputate eget libero. In hac habitasse platea dictumst. Integer purus justo, egestas eu consectetur eu, cursus in tortor.'
+// Register the Trip model (adjust if your model file has a different name)
+require('./travlr'); // change to './trips' if that's your filename
+
+// Try to get the model by the usual name, then fall back to 'trips'
+let Trip;
+try { Trip = mongoose.model('Trip'); }
+catch { Trip = mongoose.model('trips'); }
+
+const dataPath = path.join(__dirname, 'Trips_Test_Data.json');
+let raw;
+try {
+  raw = require(dataPath); // array of { name, image, description } for 60 items
+} catch (e) {
+  console.error(`Can't find Trips_Test_Data.json at: ${dataPath}`);
+  process.exit(1);
+}
+
+// Normalize JSON to your schema: add safe defaults if missing
+const normalize = (t, i) => ({
+  code: t.code || `T${String(i + 1).padStart(3, '0')}`,
+  name: t.name || `Trip ${i + 1}`,
+  length: t.length ?? 5,
+  start: t.start ? new Date(t.start) : new Date(),
+  resort: t.resort || 'Test Resort',
+  perPerson: t.perPerson ?? 1000,
+  image: t.image || `reef${i + 1}.jpg`,
+  description: t.description || 'Test description.'
+});
+const docs = raw.map(normalize);
+
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/travlr';
+
+// If ./db didn’t connect, connect here
+if (mongoose.connection.readyState === 0) {
+  mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+}
+
+mongoose.connection.on('error', (err) => {
+  console.error('MongoDB connection error:', err.message);
+});
+
+mongoose.connection.once('open', async () => {
+  console.log('Connected to MongoDB');
+
+  try {
+    const del = await Trip.deleteMany({});
+    console.log(`Cleared existing trips: ${del.deletedCount} removed`);
+    const inserted = await Trip.insertMany(docs);
+    console.log(`Inserted ${inserted.length} trip records.`);
+  } catch (err) {
+    console.error('Seeding error:', err);
+  } finally {
+    await mongoose.connection.close();
+    console.log('Disconnected from MongoDB');
   }
-];
-
-Trip.deleteMany({})
-  .then(() => Trip.insertMany(seedTrips))
-  .then((docs) => {
-    console.log(`Successfully seeded ${docs.length} trips.`);
-    mongoose.connection.close();
-  })
-  .catch((err) => {
-    console.error("Error seeding trips:", err);
-    mongoose.connection.close();
-  });
+});
